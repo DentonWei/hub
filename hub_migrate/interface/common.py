@@ -63,9 +63,3 @@ def create(request):
     else:
         aaa = {"kkk": 200}
         return JsonResponse(aaa)
-
-
-def get_sqoop(job_id):
-    sqoop = Job.objects.get(pk=job_id).sqoopsentence
-    print(sqoop)
-    return sqoop

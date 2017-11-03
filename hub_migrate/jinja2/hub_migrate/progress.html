@@ -5,6 +5,12 @@
     <title>Progress</title>
 </head>
 <body>
-    <p>progress</p>
+    <div>
+        <ul>
+        {% for table, is_finished in tables %}
+            <li>{{ table }}----------{{ is_finished }}</li>
+        {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>

@@ -14,9 +14,11 @@ def gen_sqoop_str_list(connect_dict, sqoop_tool):
         if key == "remarks":
             if value is not None:
                 pass
-        elif key == "num-mappers":
+        # elif key == "num-mappers":
+        #     sqoop_str_list += (["--" + key, "'" + value +"'"])
+        elif key == "fields-terminated-by":
             sqoop_str_list += (["--" + key, "'" + value +"'"])
-        elif key not in ["connect", "host", "database", "table", "num-mappers"]:
+        elif key not in ["connect", "host", "database", "table", "fields-terminated-by"]:
             if value is not True:
                 sqoop_str_list += (["--" + key, value])
             else:
@@ -55,11 +57,14 @@ def create_job(connect_dict, sqoop_tool, job):
     # 生成sqoop语句 sqoop_str_list, 不包含 --table
     sqoop_str_list = gen_sqoop_str_list(connect_dict, sqoop_tool)
     stdout_str = []
-    str_temp = ""
+    finished_table_temp = ""
     print(connect_dict["table"][:-1])
     # 遍历table存储的表,依次迁移数据
     for table in connect_dict["table"][:-1].split(','):
         print(sqoop_str_list + (["--table", table]))
+        # 开始进行迁移任务,将当前进行任务写入job.migrating
+        job.migrating_table = table
+        job.save()
         # 在后台执行sqoop命令,进行数据迁移
         hive_import = subprocess.run(sqoop_str_list + (["--table", table]),
                                      stdout=subprocess.PIPE,
@@ -74,12 +79,13 @@ def create_job(connect_dict, sqoop_tool, job):
         # 单个迁移任务完成时,将完成任务表名写入数据库
         else:
             stdout_str += str(hive_import.stdout, encoding="utf-8")
-            str_temp += (table + ",")
-            job.finished_table = str_temp[:-1]
+            finished_table_temp += (table + ",")
+            job.finished_table = finished_table_temp[:-1]
             job.save()
-            print(str(hive_import.stdout, encoding="utf-8"))
+            print(job.finished_table)
             print("表{}导入hive成功".format(table))
     # 当所有迁移任务完成时,更新Job状态为4
     job.status = 4
+    job.migrating_table = ""
     job.save()
     return stdout_str

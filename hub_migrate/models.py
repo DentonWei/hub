@@ -12,7 +12,7 @@ class SqoopSentence(models.Model):
     username = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
     table = models.CharField(max_length=200)
-    hive_database =  models.CharField(max_length=30, verbose_name="hive-database")
+    hive_database = models.CharField(max_length=30, verbose_name="hive-database")
     fields_terminated_by = models.CharField(max_length=10, verbose_name="fields-terminated-by")
     hive_overwrite = models.BooleanField(verbose_name="hive-overwrite")
     num_mappers = models.IntegerField(verbose_name="num-mappers")
@@ -25,5 +25,8 @@ class Job(models.Model):
     status = models.IntegerField()
     # 迁移类型: incremental,total
     type = models.CharField(max_length=30)
-    finished_table = models.CharField(max_length=200, verbose_name="finished-table", default="", blank=True, null=True)
+    migrating_table = models.CharField(max_length=30, verbose_name="migrating-table",
+                                       default="", blank=True, null=True)
+    finished_table = models.CharField(max_length=200, verbose_name="finished-table",
+                                      default="", blank=True, null=True)
     sqoopsentence = models.ForeignKey(SqoopSentence, on_delete=models.CASCADE)

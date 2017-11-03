@@ -47,8 +47,8 @@
         </div>
 
         <p>123</p>
-        <a href="progress.html">Progress</a>
-        <a href="result.html">Result</a>
+        <input class="progress" type="button" value="Progress">
+        <input class="result" type="button" value="Result">
         <input class="button" type="button" value="提交Test">
         <input class="copy" type="button" value="Copy">
         <input class="delete" type="button" value="Delete">
@@ -79,5 +79,9 @@
     $(".copy").click(function () {
         var id = 40;
         window.location.href="http://localhost:8000/hub_migrate/copy.html?id=" + 40
+    })
+    $(".progress").click(function () {
+        var id = 40;
+        window.location.href="http://localhost:8000/hub_migrate/progress.html?id=" + 40
     })
 </script>

@@ -31,6 +31,7 @@ def get_job_info(request):
 @csrf_exempt
 def get_table_info(request):
     # initialize parameter
+    print(request.POST)
     jsonTemp = json.loads(request.body.decode("utf-8"))
     id = jsonTemp["id"]
     tableName = jsonTemp["tableName"]
@@ -38,7 +39,7 @@ def get_table_info(request):
     dataDetailDicList = []
 
     # 获取请求Job对象
-    job = Job.objects.get(id=id)
+    job = Job.objects.get(pk=id)
 
     if tableName:
         # get hive database name
@@ -53,7 +54,7 @@ def get_table_info(request):
             .getOrCreate()
 
         # set hive database
-        spark.sql("use " + dataBaseName)
+        spark.sql("use " + "default")
 
         # get the table data
         dataFrame = spark.table(tableName)

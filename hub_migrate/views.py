@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.template import loader
 
 from hub_migrate.interface.common import get_sqoop
+from hub_migrate.models import Job, SqoopSentence
 
 
 def index(request):
@@ -28,5 +29,18 @@ def progress(request):
 
 
 def result(request):
-    template = loader.get_template("hub_migrate/result.html")
-    return HttpResponse(template.render())
+
+    tableList = []
+
+    # if request.GET.get("id") is not None:
+    #     id = int(request.GET.get("id"))
+    #     job = Job.objects.get(id = id)
+    #     tableStr = job.sqoopsentence["table"]
+    #     tableList = tableStr.split(',')
+
+    id = 40
+    job = Job.objects.get(pk=id)
+    tableStr = job.sqoopsentence.table
+    tableList = tableStr.split(',')
+
+    return render(request, "hub_migrate/result.html", {"tableList": tableList, "id": id})

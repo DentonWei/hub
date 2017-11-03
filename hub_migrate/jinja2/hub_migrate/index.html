@@ -27,32 +27,33 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for job in jobs %}
+                    {%- for job in jobs %}
                     <tr>
                         <td><input type="checkbox"></td>
                         <td>{{ job.id }}</td>
                         <td>{{ job.name }}</td>
                         <td>{{ job.start_time|datetime_format }}</td>
                         <td>
-                            {% if job.finished_time %}
+                            {%- if job.finished_time %}
                             {{ job.finished_time|datetime_format }}
-                            {% else %}
+                            {%- else %}
                             {{ job.start_time|runtime }}
-                            {% endif %}
+                            {%- endif %}
                         </td>
                         <td>{{ job.status }}</td>
                         <td>操作</td>
                     </tr>
-                    {% endfor %}
+                    {%- endfor %}
                 </tbody>
             </table>
         </div>
-    <div class="footer">
-        <input class="progress" type="button" value="Progress">
-        <input class="result" type="button" value="Result">
-        <input class="button" type="button" value="提交Test">
-        <input class="copy" type="button" value="Copy">
-        <input class="delete" type="button" value="Delete">
+        <div class="footer">
+            <input class="progress" type="button" value="Progress">
+            <input class="result" type="button" value="Result">
+            <input class="button" type="button" value="提交Test">
+            <input class="copy" type="button" value="Copy">
+            <input class="delete" type="button" value="Delete">
+        </div>
     </div>
 </body>
 </html>
@@ -78,10 +79,14 @@
     });
     $(".copy").click(function () {
         var id = 40;
-        window.location.href="http://localhost:8000/hub_migrate/copy.html?id=" + 40
-    })
+        window.location.href="http://localhost:8000/hub_migrate/copy.html?id=" + 51
+    });
     $(".progress").click(function () {
         var id = 40;
-        window.location.href="http://localhost:8000/hub_migrate/progress.html?id=" + 40
-    })
+        window.location.href="http://localhost:8000/hub_migrate/progress.html?id=" + 51
+    });
+    $(".result").click(function () {
+        var id = 40;
+        window.location.href="http://localhost:8000/hub_migrate/result.html"
+    });
 </script>

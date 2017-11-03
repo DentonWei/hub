@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from pyspark.sql import SparkSession, Row
 from hub_migrate.models import Job
 
-os.environ["SPARK_HOME"] = "/usr/app/spark-2.0.2-bin-hadoop2.7"
+os.environ["SPARK_HOME"] = "/home/why/app/spark-2.0.2-bin-hadoop2.6"
 os.environ["PYSPARK_PYTHON"] = "python3"
 
 
@@ -54,7 +54,7 @@ def get_table_info(request):
             .getOrCreate()
 
         # set hive database
-        spark.sql("use " + "default")
+        spark.sql("use " + dataBaseName)
 
         # get the table data
         dataFrame = spark.table(tableName)

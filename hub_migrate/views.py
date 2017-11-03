@@ -52,7 +52,7 @@ def result(request):
     #     tableStr = job.sqoopsentence["table"]
     #     tableList = tableStr.split(',')
 
-    id = 40
+    id = 51
     job = Job.objects.get(pk=id)
     tableStr = job.sqoopsentence.table
     tableList = tableStr.split(',')

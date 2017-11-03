@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^create/$', common.create, name='create'),
     # result.html页面数据接口
     url(r'^result.html/get_job_info/$', result.get_job_info, name='get job info'),
+    url(r'^result.html/get_table_info/$', result.get_table_info, name='get table info'),
 ]

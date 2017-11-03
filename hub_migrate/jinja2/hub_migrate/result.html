@@ -6,44 +6,28 @@
     <script type="text/javascript" src="{{ static('hub_migrate/js/jquery.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ static('hub_migrate/css/result.css') }}"/>
 </head>
+
 <body>
     <div class="path"></div>
     <div class="left">
-        <p>table list</p>
+        {% for i in tableList %}
+        <p class="tables" >{{ i }}</p>
+        <br>
+        {% endfor %}
     </div>
     <div class="right">
-        <table>
-            <caption>123</caption>
+        <table class="tableInfo">
+
         </table>
     </div>
 </body>
 </html>
 <script type="application/javascript">
-    $(function () {
-        var jobInfo = {
-            id: 14
-        };
-        $.ajax({
-                url: "http://localhost:8000/hub_migrate/result.html/get_job_info/",
-                dataType: "json",
-                async: false,
-                type: "post",
-                data: JSON.stringify(jobInfo),
-                success: function (data) {
-                    console.log(data);
-                    $("textarea").html(data["stdout"])
-                },
-                error: function (err) {
-                    console.log(err);
-                }
-            })
-    })
-
-     $('#table').click(function () {
+     $('.tables').click(function () {
         var tableInfo = {
-            id: 14
-            tableName: ""
-        };
+            id: {{ id }},
+            tableName: $(this).text()
+        }
         $.ajax({
                 url: "http://localhost:8000/hub_migrate/result.html/get_table_info/",
                 dataType: "json",
@@ -52,7 +36,29 @@
                 data: JSON.stringify(tableInfo),
                 success: function (data) {
                     console.log(data);
-                    $("textarea").html(data["stdout"])
+                    var item;
+                    var listColumns = data["column"];
+                    var dataDetail = data["dataList"];
+
+                    $(".tableInfo").empty();
+
+                    <!--console.log(listColumns);-->
+
+                    $('.tableInfo').append("<tr>");
+                    $.each(listColumns, function(i, result){
+                        item = "<td>" + result + "</td>";
+                        $('.tableInfo').append(item);
+                    });
+                    $('.tableInfo').append("</tr>");
+
+                    $.each(dataDetail, function(i, result){
+                        $('.tableInfo').append("<tr>");
+                        $.each(listColumns, function(j, flags){
+                            item = "<td>" + result[flags] + "</td>";
+                            $('.tableInfo').append(item);
+                        })
+                        $('.tableInfo').append("<tr>");
+                    })
                 },
                 error: function (err) {
                     console.log(err);

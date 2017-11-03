@@ -22,6 +22,7 @@ class SqoopSentence(models.Model):
 class Job(models.Model):
     name = models.CharField(max_length=100)
     start_time = models.DateTimeField()
+    finished_time = models.DateTimeField(blank=True, null=True)
     status = models.IntegerField()
     # 迁移类型: incremental,total
     type = models.CharField(max_length=30)

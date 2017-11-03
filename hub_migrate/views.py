@@ -6,9 +6,8 @@ from hub_migrate.models import Job
 
 
 def index(request):
-    print(request.GET)
-    template = loader.get_template("hub_migrate/index.html")
-    return HttpResponse(template.render())
+    jobs = Job.objects.all()
+    return render(request, "hub_migrate/index.html", {"jobs": jobs})
 
 
 def new(request):

@@ -20,39 +20,39 @@
                         <td></td>
                         <td>ID</td>
                         <td>Name</td>
-                        <td>time</td>
+                        <td>starttime</td>
+                        <td>runtime</td>
                         <td>status</td>
                         <td>operation</td>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for job in jobs %}
                     <tr>
                         <td><input type="checkbox"></td>
-                        <td>14</td>
-                        <td>sscustp</td>
-                        <td>2017-10-31 06:50:55</td>
-                        <td>已完成</td>
+                        <td>{{ job.id }}</td>
+                        <td>{{ job.name }}</td>
+                        <td>{{ job.start_time|datetime_format }}</td>
+                        <td>
+                            {% if job.finished_time %}
+                            {{ job.finished_time|datetime_format }}
+                            {% else %}
+                            {{ job.start_time|runtime }}
+                            {% endif %}
+                        </td>
+                        <td>{{ job.status }}</td>
                         <td>操作</td>
                     </tr>
-                     <tr>
-                        <td><input type="checkbox"></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
-
-        <p>123</p>
+    <div class="footer">
         <input class="progress" type="button" value="Progress">
         <input class="result" type="button" value="Result">
         <input class="button" type="button" value="提交Test">
         <input class="copy" type="button" value="Copy">
         <input class="delete" type="button" value="Delete">
-        
     </div>
 </body>
 </html>

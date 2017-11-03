@@ -1,3 +1,4 @@
+import datetime
 import subprocess
 
 
@@ -72,6 +73,8 @@ def create_job(connect_dict, sqoop_tool, job):
         # 迁移任务进行失败时,更新job状态为3
         if hive_import.returncode != 0:
             job.status = 3
+            job.migrating_table = "failed"
+            job.finished_time = datetime.datetime.now()
             job.save()
             print(str(hive_import.stderr, encoding="utf-8"))
             print("表{}导入hive失败".format(table))
@@ -86,6 +89,7 @@ def create_job(connect_dict, sqoop_tool, job):
             print("表{}导入hive成功".format(table))
     # 当所有迁移任务完成时,更新Job状态为4
     job.status = 4
+    job.finished_time = datetime.datetime.now()
     job.migrating_table = ""
     job.save()
     return stdout_str

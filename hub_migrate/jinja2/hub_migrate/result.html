@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+    <script type="text/javascript" src="{{ static('hub_migrate/js/jquery.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ static('hub_migrate/css/result.css') }}"/>
+</head>
+<body>
+    <div class="path"></div>
+    <div class="left">
+        <p>table list</p>
+    </div>
+    <div class="right">
+        <table>
+            <caption>123</caption>
+        </table>
+    </div>
+</body>
+</html>
+<script type="application/javascript">
+    $(function () {
+        var jobInfo = {
+            id: 14
+        };
+        $.ajax({
+                url: "http://localhost:8000/hub_migrate/result.html/get_job_info/",
+                dataType: "json",
+                async: false,
+                type: "post",
+                data: JSON.stringify(jobInfo),
+                success: function (data) {
+                    console.log(data);
+                    $("textarea").html(data["stdout"])
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+    })
+
+     $('#table').click(function () {
+        var tableInfo = {
+            id: 14
+            tableName: ""
+        };
+        $.ajax({
+                url: "http://localhost:8000/hub_migrate/result.html/get_table_info/",
+                dataType: "json",
+                async: false,
+                type: "post",
+                data: JSON.stringify(tableInfo),
+                success: function (data) {
+                    console.log(data);
+                    $("textarea").html(data["stdout"])
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+    })
+</script>

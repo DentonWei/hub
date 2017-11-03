@@ -1,0 +1,62 @@
+li {
+    list-style-type: none;
+    margin: 10px 0;
+}
+.left {
+    /*display: inline-block;*/
+    float: left;
+    width: 30%;
+    height: 500px;
+    border: 1px solid black;
+}
+.left .host {
+    height: 200px;
+    border: solid 1px black;
+}
+
+.left .host li input {
+    float: right;
+    margin-right: 40px;
+}
+
+.left .result {
+    width: 30%;
+    height: 200px;
+    margin-top: 20px;
+    /*border: solid 1px black;*/
+}
+
+.middle {
+    display: inline-block;
+    margin-left: 3%;
+    width: 30%;
+    height: 500px;
+    border: 1px solid black;
+}
+
+.middle table{
+
+}
+
+.right {
+    /*display: inline-block;*/
+    float: right;
+    margin-right: 3%;
+    width: 30%;
+    height: 500px;
+    border: 1px solid black;
+}
+
+.right .hadoop {
+    border: 1px solid black;
+}
+
+.right .hadoop li input {
+    float: right;
+    margin-right: 20px;
+}
+
+.create {
+    float: right;
+    margin-right: 10%;
+}

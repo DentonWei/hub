@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hub data migration</title>
+    <script type="text/javascript" src="{{ static('hub_migrate/js/jquery.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ static('hub_migrate/css/index.css') }}"/>
+</head>
+<body>
+    <div class="container">
+        <div class="top">
+            <input type="text" placeholder="请输入查询条件">
+            <a href="new.html">New</a>
+        </div>
+        <div class="table" align="center">
+            <table border="1" cellpadding="0" cellspacing="0">
+                <caption>Job Management</caption>
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td>ID</td>
+                        <td>Name</td>
+                        <td>time</td>
+                        <td>status</td>
+                        <td>operation</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>14</td>
+                        <td>sscustp</td>
+                        <td>2017-10-31 06:50:55</td>
+                        <td>已完成</td>
+                        <td>操作</td>
+                    </tr>
+                     <tr>
+                        <td><input type="checkbox"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>123</p>
+        <a href="progress.html">Progress</a>
+        <a href="result.html">Result</a>
+        <input class="button" type="button" value="提交Test">
+        <input class="copy" type="button" value="Copy">
+        <input class="delete" type="button" value="Delete">
+        
+    </div>
+</body>
+</html>
+<script type="application/javascript">
+    $(".button").click(function () {
+        var test_json = {
+            tt: {
+                a: 1,
+                b: 2
+            }
+        };
+        var s2 = JSON.stringify(test_json);
+        $.ajax({
+            url: "http://localhost:8000/hub_migrate/index.html/get_job/",
+            dataType: "json",
+            async: false,
+            type: "post",
+            data: s2,
+            success: function (data) {
+                console.log(data);
+            }
+        })
+    });
+    $(".copy").click(function () {
+        var id = 40;
+        window.location.href="http://localhost:8000/hub_migrate/copy.html?id=" + 40
+    })
+</script>

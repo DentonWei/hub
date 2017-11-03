@@ -1,0 +1,12 @@
+.top {
+    margin-left: 80%;
+}
+.table td:first-child {
+    width: 2%;
+    text-align: center;
+}
+.table td {
+    width: 10%;
+    height: 30px;
+    text-align: center;
+}

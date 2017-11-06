@@ -1,8 +1,10 @@
 import json
-import os, sys
+import os
+
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from pyspark.sql import SparkSession, Row
+
 from hub_migrate.models import Job
 
 os.environ["SPARK_HOME"] = "/home/why/app/spark-2.0.2-bin-hadoop2.6"
@@ -18,7 +20,6 @@ def get_job_info(request):
     # 获取请求Job对象
     job = Job.objects.get(id=id)
     tables = job.sqoopsentence.table
-
     # split tables on the base of ','
     tableList = tables.split(',')
     

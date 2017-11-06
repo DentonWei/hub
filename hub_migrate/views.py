@@ -1,6 +1,9 @@
+import os
+
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
+from lxml import etree
 
 from hub_migrate.models import Job
 
@@ -56,5 +59,16 @@ def result(request):
     job = Job.objects.get(pk=id)
     tableStr = job.sqoopsentence.table
     tableList = tableStr.split(',')
+    database = job.sqoopsentence.hive_database
+    # 获取hive配置文件路径
+    HIVE_HOME = os.getenv("HIVE_HOME")
+    hive_conf = os.path.join(HIVE_HOME, "conf/hive-site.xml")
+    # 生成hive配置文件的解析器,并解析文件
+    parser = etree.XMLParser()
+    xml = etree.parse(hive_conf, parser)
+    parse_str = "/configuration/property[name='hive.metastore.warehouse.dir']/value"
+    hive_database_dir = xml.xpath(parse_str)[0].text + "/" + database + ".db"
+    # print(hive_database_dir)
 
-    return render(request, "hub_migrate/result.html", {"tableList": tableList, "id": id})
+    return render(request, "hub_migrate/result.html",
+                  {"tableList": tableList, "id": id, "hive_path": hive_database_dir})

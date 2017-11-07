@@ -23,4 +23,6 @@ urlpatterns = [
     # result.html页面数据接口
     url(r'^result.html/get_job_info/$', result.get_job_info, name='get job info'),
     url(r'^result.html/get_table_info/$', result.get_table_info, name='get table info'),
+    url(r'^result.html/get_nextPage_info/$', result.get_nextPage_info, name='get nextPage info'),
+    url(r'^result.html/get_previousPage_info/$', result.get_previousPage_info, name='get previous info'),
 ]

@@ -77,7 +77,6 @@
                 async: true,
                 type: "post",
                 data: dummy,
-                {#                                contentType : "application/json;charset=UTF-8",#}
                 success: function (data) {
                     console.log(data);
                     $("textarea").html(data["success"])
@@ -104,7 +103,6 @@
                 async: true,
                 type: "post",
                 data: dummy,
-                {#                                contentType : "application/json;charset=UTF-8",#}
                 success: function (data) {
                     console.log(data);
                     $("textarea").html(data["stdout"])

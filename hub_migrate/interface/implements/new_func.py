@@ -6,7 +6,7 @@ def gen_sqoop_str_list(connect_dict, sqoop_tool):
     """
     根据传入字典生成sqoop_str_list,并返回
     """
-    print(sqoop_tool)
+    # print(sqoop_tool)
     if sqoop_tool == "import":
         connect_dict["hive-import"] = True
     connect_dict["driver"] = "com.ibm.as400.access.AS400JDBCDriver"
@@ -26,7 +26,7 @@ def gen_sqoop_str_list(connect_dict, sqoop_tool):
                 sqoop_str_list += (["--" + key, value])
             else:
                 sqoop_str_list += (["--" + key])
-    print(sqoop_str_list)
+    # print(sqoop_str_list)
     return sqoop_str_list
 
 
@@ -37,19 +37,20 @@ def analyse_dict(sqoop_str_list, test=True):
     :return 返回终端的output
     """
     # 在后台执行sqoop命令
+    print("正在查询数据库")
     as400_tables = subprocess.run(sqoop_str_list,
                                   stdout=subprocess.PIPE,
                                   stderr=subprocess.PIPE)
     result_dict = {}
     # 当连接不成功时,返回后台错误代码
     if as400_tables.stderr is not None and as400_tables.stdout is None:
-        print("#######################")
+        print("连接错误")
         result_dict["errors"] = str(as400_tables.stderr, encoding="utf-8")
         return result_dict
     else:
         # 测试成功时,返回{"success": 1}
         if test:
-            print("test")
+            print("连接as400成功")
             result_dict["success"] = 1
             return result_dict
         # 当提交成功时,返回查询获得的数据库表名
@@ -63,7 +64,7 @@ def create_job(connect_dict, sqoop_tool, job):
     sqoop_str_list = gen_sqoop_str_list(connect_dict, sqoop_tool)
     stdout_str = []
     finished_table_temp = ""
-    print(connect_dict["table"][:-1])
+    # print(connect_dict["table"][:-1])
     # 遍历table存储的表,依次迁移数据
     for table in connect_dict["table"][:-1].split(','):
         print(sqoop_str_list + (["--table", table]))

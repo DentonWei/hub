@@ -4,12 +4,13 @@ import os
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from pyspark.sql import SparkSession, Row
-
+from django.core.paginator import Paginator
 from hub_migrate.models import Job
 
-os.environ["SPARK_HOME"] = "/home/why/app/spark-2.0.2-bin-hadoop2.6"
-os.environ["PYSPARK_PYTHON"] = "python3"
-
+DATADETAIL = None
+DATACOLUMNS = None
+PAGETEMP = None
+PAGE = None
 
 @csrf_exempt
 def get_job_info(request):
@@ -32,7 +33,9 @@ def get_job_info(request):
 @csrf_exempt
 def get_table_info(request):
     # initialize parameter
-    print(request.POST)
+    global DATADETAIL, PAGETEMP, PAGE, DATACOLUMNS
+    
+    # print(request.POST)
     jsonTemp = json.loads(request.body.decode("utf-8"))
     id = jsonTemp["id"]
     tableName = jsonTemp["tableName"]
@@ -55,15 +58,55 @@ def get_table_info(request):
             .getOrCreate()
 
         # set hive database
-        spark.sql("use " + dataBaseName)
+        spark.sql("use " + "default")
 
         # get the table data
         dataFrame = spark.table(tableName)
-        dataColumnNameList = dataFrame.columns
-        dataDetail = dataFrame.select('*').limit(20).collect()
-        dataDetailDicList = [dataTemp.asDict() for dataTemp in dataDetail]
+        DATACOLUMNS = dataFrame.columns
+        dataColumnNameList = DATACOLUMNS
+        dataDetail = dataFrame.select('*').collect()
+
+        # initialize global parameter
+        DATADETAIL = [dataTemp.asDict() for dataTemp in dataDetail]
+        PAGETEMP = Paginator(DATADETAIL, 20)
+
+        # return data
+        PAGE = 1
+        dataDetailDicList = PAGETEMP.page(PAGE).object_list
 
     # return column name, first 20 rows data and table list of the job
     a = {"success": 1, "column": dataColumnNameList, "dataList": dataDetailDicList}
+
+    return JsonResponse(a)
+
+@csrf_exempt
+def get_nextPage_info(request):
+    global DATADETAIL, PAGETEMP, PAGE
+
+    if PAGETEMP.page(PAGE).has_next() == True:
+        PAGE += 1
+    else:
+        PAGE = PAGETEMP.num_pages
+
+    dataDetailDicList = PAGETEMP.page(PAGE).object_list
+    dataColumnNameList = DATACOLUMNS
+
+    a = {"column": dataColumnNameList, "dataList": dataDetailDicList}
+
+    return JsonResponse(a)
+
+@csrf_exempt
+def get_previousPage_info(request):
+    global DATADETAIL, PAGETEMP, PAGE
+
+    if PAGETEMP.page(PAGE).has_previous() == True:
+        PAGE -= 1
+    else:
+        PAGE = 1
+
+    dataDetailDicList = PAGETEMP.page(PAGE).object_list
+    dataColumnNameList = DATACOLUMNS
+
+    a = {"column": dataColumnNameList, "dataList": dataDetailDicList}
 
     return JsonResponse(a)

@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^index.html/copy/$', index.copy, name="copy"),
     # new.html页面数据接口
     url(r'^test/$', common.test, name='test'),
+    url(r'^submit/$', common.submit, name='submit'),
     url(r'^create/$', common.create, name='create'),
     # result.html页面数据接口
     url(r'^result.html/get_job_info/$', result.get_job_info, name='get job info'),

@@ -17,12 +17,19 @@ def runtime(dt):
 def datetime_format(dt, format='%Y-%m-%d %H:%M:%S'):
     return dt.strftime(format)
 
+
 def environment(**options):
     env = Environment(**options)
+    # 更新全局变量字典
     env.globals.update({
         'static': staticfiles_storage.url,
         'url': reverse,
     })
-    env.filters["runtime"] = runtime
-    env.filters["datetime_format"] = datetime_format
+    # env.filters["runtime"] = runtime
+    # env.filters["datetime_format"] = datetime_format
+    # 环境的过滤器字典
+    env.filters = {
+        "runtime": runtime,
+        "datetime_format": datetime_format
+    }
     return env

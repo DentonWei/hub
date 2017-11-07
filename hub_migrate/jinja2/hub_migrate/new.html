@@ -74,7 +74,34 @@
             $.ajax({
                 url: "http://localhost:8000/hub_migrate/test/",
                 dataType: "json",
-                async: false,
+                async: true,
+                type: "post",
+                data: dummy,
+                {#                                contentType : "application/json;charset=UTF-8",#}
+                success: function (data) {
+                    console.log(data);
+                    $("textarea").html(data["success"])
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        })
+    });
+{# 点击submit #}
+    $(function() {
+        $(".submit").click(function () {
+            var dummy = {
+                'host': '192.168.88.249',
+                'database': 'AOCHUBFOBJ',
+                'username': 'KWP001',
+                'password': 'KWP001'
+            };
+            dummy = JSON.stringify(dummy);
+            $.ajax({
+                url: "http://localhost:8000/hub_migrate/submit/",
+                dataType: "json",
+                async: true,
                 type: "post",
                 data: dummy,
                 {#                                contentType : "application/json;charset=UTF-8",#}

@@ -6,11 +6,13 @@ def gen_sqoop_str_list(connect_dict, sqoop_tool):
     """
     根据传入字典生成sqoop_str_list,并返回
     """
+    print(sqoop_tool)
     if sqoop_tool == "import":
         connect_dict["hive-import"] = True
     connect_dict["driver"] = "com.ibm.as400.access.AS400JDBCDriver"
     sqoop_str_list = ["/home/why/app/sqoop-1.4.6/bin/sqoop", sqoop_tool]
     sqoop_str_list += ["--connect", "jdbc:as400://" + connect_dict["host"] + "/" + connect_dict["database"]]
+    
     for key, value in connect_dict.items():
         if key == "remarks":
             if value is not None:
@@ -24,6 +26,7 @@ def gen_sqoop_str_list(connect_dict, sqoop_tool):
                 sqoop_str_list += (["--" + key, value])
             else:
                 sqoop_str_list += (["--" + key])
+    print(sqoop_str_list)
     return sqoop_str_list
 
 
@@ -46,6 +49,7 @@ def analyse_dict(sqoop_str_list, test=True):
     else:
         # 测试成功时,返回{"success": 1}
         if test:
+            print("test")
             result_dict["success"] = 1
             return result_dict
         # 当提交成功时,返回查询获得的数据库表名

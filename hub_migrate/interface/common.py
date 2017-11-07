@@ -14,12 +14,24 @@ def test(request):
     if request.method == "POST":
         # 解析json字符串
         req_json = json.loads(request.body.decode("utf-8"))
+        print(req_json)
         sqoop_str_list = new_func.gen_sqoop_str_list(req_json, sqoop_tool="list-tables")
         responce_dict = new_func.analyse_dict(sqoop_str_list, test=True)
         return JsonResponse(responce_dict)
     else:
         aaa = {"kkk": 200}
         return JsonResponse(aaa)
+
+
+@csrf_exempt
+def submit(request):
+    if request.method == "POST":
+        # 解析json字符串
+        req_json = json.loads(request.body.decode("utf-8"))
+        print(req_json)
+        sqoop_str_list = new_func.gen_sqoop_str_list(req_json, sqoop_tool="list-tables")
+        responce_dict = new_func.analyse_dict(sqoop_str_list, test=False)
+        return JsonResponse(responce_dict)
 
 
 @csrf_exempt

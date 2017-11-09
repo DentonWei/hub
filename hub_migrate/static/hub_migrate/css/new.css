@@ -1,62 +1,120 @@
-li {
-    list-style-type: none;
-    margin: 10px 0;
+@charset "UTF-8";
+.title{
+    width: 80%;
+    margin: 0 auto 0 auto;
+    padding: 5px 0;
+    font-size: 36px;
+    color: #ff9900;
+    text-align: center;
+    font-family: "微软雅黑";
 }
-.left {
-    /*display: inline-block;*/
+.container{width: 100%;height: 90%;}
+.container .left,.middle,.right{
+    width: 28%;
+    height: 80%;
+    margin:20px 33px;
     float: left;
-    width: 30%;
-    height: 500px;
-    border: 1px solid black;
+    border: 1px solid #f90;
+    /*padding: 15px;*/
 }
-.left .host {
+h2.title1{
+    color: #ff9900;
+    font-size: 25px;
+    padding: 5px;
+}
+.left ul{
+    /*padding: 15px;*/
+    color: #ff9900;
+}
+.left ul li{
+    margin: 13px;
+    font-size: 18px;
+    height: 40px;
+}
+.left ul li input{
+    float: right;
+    font-size: 18px;
+    text-indent: 1em;
+    height: 70%;
+    color: #ff9900;
+}
+.left .feature{
+    height: 40px;
+}
+.left .feature button{
+    height: 78%;
+    width: 22%;
+    font-size: 20px;
+    color: #ff9900;
+    margin-left: 16%;
+    background-color: transparent;
+}
+.left #evaluation{
+    padding: 15px;
+    color: #ff9900;
+    font-weight: 600;
+}
+.middle ul{
+    padding: 15px;
+    color: #ff9900;
     height: 200px;
-    border: solid 1px black;
+    overflow-y: auto;
 }
-
-.left .host li input {
-    float: right;
-    margin-right: 40px;
+.middle ul li{
+    margin: 13px;
+    font-size: 18px;
+    height: 40px;
+    color: #ff9900;
 }
-
-.left .result {
-    width: 30%;
-    height: 200px;
-    margin-top: 20px;
-    /*border: solid 1px black;*/
-}
-
-.middle {
-    display: inline-block;
-    margin-left: 3%;
-    width: 30%;
-    height: 500px;
-    border: 1px solid black;
-}
-
-.middle table{
-
-}
-
-.right {
-    /*display: inline-block;*/
-    float: right;
-    margin-right: 3%;
-    width: 30%;
-    height: 500px;
-    border: 1px solid black;
-}
-
-.right .hadoop {
-    border: 1px solid black;
-}
-
-.right .hadoop li input {
-    float: right;
+.middle ul li input{
+    font-size: 18px;
+    text-indent: 1em;
+    color: #ff9900;
     margin-right: 20px;
 }
-
-.create {
+h2.title1 input{
+    font-size: 20px;
+    text-indent: 1em;
+    height: 70%;
+    color: #ff9900;
+}
+h2.title1 input[name="transport-type"]{
+    height: 17px;
+    width: 30px;
+}
+.right{position: relative}
+.right ul li{
+    margin: 13px;
+    font-size: 18px;
+    height: 40px;
+    color: #ff9900;
+}
+.right ul li input{
     float: right;
-    margin-right: 10%;
+    font-size: 18px;
+    text-indent: 1em;
+    height: 70%;
+    color: #ff9900;
+}
+.right .feature button{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    height: 6%;
+    width: 22%;
+    font-size: 17px;
+    color: #ff9900;
+    margin-left: 16%;
+    background-color: transparent;
+}
+.container .end button{
+    position: absolute;
+    bottom: 20px;
+    right: 60px;
+    height: 6%;
+    width: 9%;
+    font-size: 21px;
+    color: #ff9900;
+    margin-left: 16%;
+    background-color: transparent;
 }

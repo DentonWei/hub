@@ -1,0 +1,14 @@
+/* css reset*/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td{margin:0; padding:0;}
+/*body{ font-size:10px; user-select:none;cursor: default;}*/
+html,body{width:100%; height: 100%;}
+address, caption, cite, code, dfn, em, strong, th{font-style:normal; font-weight:normal;}
+a{text-decoration:none;color: #000000;}
+img{border:none;}
+ol,ul,li{list-style:none;}
+input, textarea, select, button{outline: none;}
+input:focus{border-color: #ff9900!important;}
+button{cursor: pointer;}
+table{border-collapse:collapse;}
+/*去掉ie下输入框右边的默认的清除X功能*/
+::-ms-clear,::-ms-reveal{display:none;}

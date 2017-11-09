@@ -1,12 +1,62 @@
-.top {
-    margin-left: 80%;
+@charset "UTF-8";
+.title{
+    width: 80%;
+    margin: 0 auto 0 auto;
+    padding: 5px 0;
+    font-size: 36px;
+    color: #ff9900;
+    text-align: center;
+    font-family: "微软雅黑";
 }
-.table td:first-child {
-    width: 2%;
+.container{width: 100%;height: 90%;}
+.container .left,.right{
+    height: 8%;
+    margin:10px 33px;
+    float: left;
+    /*border: 1px solid #f90;*/
+}
+.container .left{
+    width: 28%;
+}
+.container .right{
+    width: 60%;
+    text-align: right;
+}
+h2.title1{
+    color: #ff9900;
+    font-size: 30px;
+    padding: 5px;
+}
+.right input{
+    width: 32%;
+    height: 90%;
+    color: #ff9900;
+    font-size: 20px;
+    border-radius: 10px;
+    text-indent: 1em;
+}
+.right button{
+    width: 12%;
+    height: 90%;
+    color: #ff9900;
+    font-size: 20px;
+    background-color: transparent;
+}
+.container .creatTable{
+    margin: 10px 33px;
+    height: 80%;
+    /*overflow-y: scroll;*/
+}
+.container .creatTable table{
+    width: 98%;
+    /*height: 100%;*/
     text-align: center;
 }
-.table td {
+.container .creatTable table tr{
+    width:100% ;
+
+}
+.container .creatTable table tr td{
     width: 10%;
-    height: 30px;
-    text-align: center;
+    height:20px;
 }

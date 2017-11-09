@@ -23,7 +23,7 @@ class Job(models.Model):
     name = models.CharField(max_length=100)
     start_time = models.DateTimeField()
     finished_time = models.DateTimeField(blank=True, null=True)
-    status = models.IntegerField()
+    status = models.CharField(max_length=30)
     # 迁移类型: incremental,total
     type = models.CharField(max_length=30)
     migrating_table = models.CharField(max_length=30, verbose_name="migrating-table",

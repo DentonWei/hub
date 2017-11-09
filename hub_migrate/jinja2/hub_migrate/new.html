@@ -4,149 +4,47 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <title>HUB data migration</title>
+    <link rel="stylesheet" href={{ static('hub_migrate/css/new.css') }}>
+    <link rel="stylesheet" href={{ static('hub_migrate/css/reset.css') }}>
     <script type="text/javascript" src="{{ static('hub_migrate/js/jquery.js') }}"></script>
-    <link rel="stylesheet" type="text/css" href="{{ static('hub_migrate/css/new.css') }}"/>
+    <script type="text/javascript" src="{{ static('hub_migrate/js/new.js') }}"></script>
 </head>
 <body>
-    <h1>HUB Migration</h1>
+    <h1 class="title">Hub migration</h1>
     <div class="container">
         <div class="left">
-            <div class="host">
-                <ul>
-                    <li><label>Host Name:</label><input type="text"></li>
-                    <li><label>dataBase Name:</label><input type="text"></li>
-                    <li><label>UserName:</label><input type="text"></li>
-                    <li><label>Password:</label><input type="text"></li>
-                    <li>
-                        <input class="test" type="submit" value="test">
-                        <input class="submit" type="submit" value="submit">
-                    </li>
-                </ul>
-            </div>
-            <div class="result">
-                <p>result</p>
-                <textarea rows="12" cols="48" name="result" readonly="true"></textarea>
-            </div>
+            <h2 class="title1">primary data connection</h2>
+            <ul>
+            <li><label>Host Name:</label><input type="text" id="host" value="192.168.88.249"></li>
+            <li><label>dataBase Name:</label><input type="text" id="database" value="AOCHUBFOBJ"></li>
+            <!--<li><label>Prot Number:</label><input type="text"></li>-->
+            <li><label>Username:</label><input type="text" id="username" value="KWP001"></li>
+            <li><label>Password:</label><input type="password" id="password" value="KWP001"></li>
+            </ul>
+            <div class="feature"><button id="test">test</button><button id="submit">submit</button></div>
+            <h2 class="title1">Result</h2>
+            <div id="evaluation"></div>
         </div>
         <div class="middle">
-            <table border="1">
-                <thead>
-                    <tr>
-                        <td>1</td>
-                        <td>table_name</td>
-                        <td>description</td>
-                        <td><input type="button" value="click"></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-
-            </table>
+            <h2 class="title1">table name</h2>
+            <ul id="tableList"></ul>
+            <h2 class="title1">Job: <input id="jobVaule" type="text"></h2>
+            <h2 class="title1"><input type="radio" name="transport-type"> banch </h2>
+            <h2 class="title1"><input type="radio" name="transport-type"> Real-Time </h2>
         </div>
         <div class="right">
-            <div class="hadoop">
-                <ul>
-                    <li><label>hive-database:</label><input type="text"></li>
-                    <li><label>fields-terminated-by:</label><input type="text"></li>
-                    <li><label>num-mappers:</label><input type="text"></li>
-                </ul>
-            </div>
+            <h2 class="title1">Hadoop file output</h2>
+            <ul>
+            <li><label>Database:</label>
+                <input id="hive-database" type="text" value="etl"></li>
+            <li><label>Terminated:</label>
+                <input id="terminated" type="text" value=","></li>
+            <li><label>Mappers:</label>
+                <input id="mappers" type="text" value="1"></li>
+            </ul>
+            <div class="feature"><button>Advance</button></div>
         </div>
-        <input class="create" type="button" value="创建Job" style="float:right; margin-right:10%">
+        <div class="end"><button id="create" >Create</button></div>
     </div>
 </body>
 </html>
-<script type="text/javascript">
-{#  测试连接  #}
-    $(function() {
-        $(".test").click(function () {
-            var dummy = {
-                'host': '192.168.88.249',
-                'database': 'AOCHUBFOBJ',
-                'username': 'KWP001',
-                'password': 'KWP001'
-            };
-            dummy = JSON.stringify(dummy);
-            $.ajax({
-                url: "http://localhost:8000/hub_migrate/test/",
-                dataType: "json",
-                async: true,
-                type: "post",
-                data: dummy,
-                success: function (data) {
-                    console.log(data);
-                    $("textarea").html(data["success"])
-                },
-                error: function (err) {
-                    console.log(err);
-                }
-            })
-        })
-    });
-{# 点击submit #}
-    $(function() {
-        $(".submit").click(function () {
-            var dummy = {
-                'host': '192.168.88.249',
-                'database': 'AOCHUBFOBJ',
-                'username': 'KWP001',
-                'password': 'KWP001'
-            };
-            dummy = JSON.stringify(dummy);
-            $.ajax({
-                url: "http://localhost:8000/hub_migrate/submit/",
-                dataType: "json",
-                async: true,
-                type: "post",
-                data: dummy,
-                success: function (data) {
-                    console.log(data);
-                    $("textarea").html(data["stdout"])
-                },
-                error: function (err) {
-                    console.log(err);
-                }
-            })
-        })
-    });
-{#  提交Job  #}
-    $(function () {
-        $(".create").click(function () {
-            var connection = {
-                conn: {
-                    "host": '192.168.88.249',
-                    "database": 'AOCHUBFOBJ',
-                    "username": 'KWP001',
-                    "password": 'KWP001',
-                    "table": ["sscustp", "ddacmsp", "sstnjnp"],
-                    "hive-database": 'etl',
-                    "fields-terminated-by": ",",
-                    "num-mappers": '1',
-                    "hive-overwrite": true,
-                    "remarks": ""
-                },
-                job: {
-                    "name": "hub-migration",
-                    "status": 0,
-                    "type": 1
-                }
-            };
-            connection = JSON.stringify(connection);
-            $.ajax({
-                url: "http://localhost:8000/hub_migrate/create/",
-                dataType: "json",
-                async: false,
-                type: "post",
-                data: connection,
-                success: function (data) {
-                    console.log(data);
-                    window.location.href="http://localhost:8000/hub_migrate/index.html"
-                }
-            })
-        })
-    })
-</script>

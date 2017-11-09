@@ -1,89 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+<head lang="zh-CN">
     <meta charset="UTF-8">
-    <title>Hub data migration</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>HUB data migration</title>
+    <link rel="stylesheet" href="{{ static('hub_migrate/css/reset.css') }}">
+    <link rel="stylesheet" href="{{ static('hub_migrate/css/index.css') }}">
     <script type="text/javascript" src="{{ static('hub_migrate/js/jquery.js') }}"></script>
-    <link rel="stylesheet" type="text/css" href="{{ static('hub_migrate/css/index.css') }}"/>
 </head>
 <body>
+    <h1 class="title">Hub migration</h1>
     <div class="container">
-        <div class="top">
-            <input type="text" placeholder="请输入查询条件">
-            <a href="new.html">New</a>
+        <div class="left">
+            <h2 class="title1">Job management</h2>
         </div>
-        <div class="table" align="center">
-            <table border="1" cellpadding="0" cellspacing="0">
-                <caption>Job Management</caption>
+        <div class="right">
+            <input type="text" placeholder="请输入查询条件">
+            <button>New</button>
+        </div>
+        <div class="creatTable">
+            <table cellpadding="0" cellspacing="0" border="1" >
                 <thead>
-                    <tr>
-                        <td></td>
-                        <td>ID</td>
-                        <td>Name</td>
-                        <td>starttime</td>
-                        <td>runtime</td>
-                        <td>status</td>
-                        <td>operation</td>
-                    </tr>
+                <tr>
+                    <td></td>
+                    <td>ID</td>
+                    <td>Name</td>
+                    <td>StartTime</td>
+                    <td>RunTime</td>
+                    <td>status</td>
+                    <td>operation</td>
+                </tr>
                 </thead>
-                <tbody>
-                    {%- for job in jobs %}
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>{{ job.id }}</td>
-                        <td>{{ job.name }}</td>
-                        <td>{{ job.start_time|datetime_format }}</td>
-                        <td>
-                            {%- if job.finished_time %}
-                            {{ job.finished_time|datetime_format }}
-                            {%- else %}
-                            {{ job.start_time|runtime }}
-                            {%- endif %}
-                        </td>
-                        <td>{{ job.status }}</td>
-                        <td>操作</td>
-                    </tr>
-                    {%- endfor %}
+                <tbody id="addTable">
+
                 </tbody>
             </table>
-        </div>
-        <div class="footer">
-            <input class="progress" type="button" value="Progress">
-            <input class="result" type="button" value="Result">
-            <input class="button" type="button" value="提交Test">
-            <input class="copy" type="button" value="Copy">
-            <input class="delete" type="button" value="Delete">
         </div>
     </div>
 </body>
 </html>
-<script type="application/javascript">
-    $(".button").click(function () {
-        var test_json = {
-            tt: {
-                a: 1,
-                b: 2
-            }
-        };
-        var s2 = JSON.stringify(test_json);
-        $.ajax({
-            url: "http://localhost:8000/hub_migrate/index.html/get_job/",
-            dataType: "json",
-            async: false,
-            type: "post",
-            data: s2,
-            success: function (data) {
-                console.log(data);
-            }
-        })
-    });
-    $(".copy").click(function () {
-        window.location.href="http://localhost:8000/hub_migrate/copy.html?id=" + 51
-    });
-    $(".progress").click(function () {
-        window.location.href="http://localhost:8000/hub_migrate/progress.html?id=" + 51
-    });
-    $(".result").click(function () {
-        window.location.href="http://localhost:8000/hub_migrate/result.html"
-    });
+<script type="text/javascript">
+    $(function(){
+            $.ajax({
+                url : "http://192.168.1.112/hub_migrate/index.html/get_job/",
+                dataType : "json",
+                async : true,
+                type : "post",
+                contentType : "application/json;charset=UTF-8",
+                success : function(data){
+                    console.log(data);
+                    var addTable = $("#addTable");
+                    var json =JSON.parse(data.page)
+                    for(var i=0;i < json.length;i++){
+                        addTable.append($("<tr>"));
+                        var d = json[i];
+                        $("#addTable").append('<td><input type="radio" name="radio"></td>');
+                        $("#addTable").append('<td>'+d.pk+'</td>');
+                        $("#addTable").append('<td>'+d.fields.name+'</td>');
+                        $("#addTable").append('<td>'+d.fields.start_time+'</td>');
+                        $("#addTable").append('<td>'+d.fields.finished_time+'</td>');
+                        $("#addTable").append('<td>'+d.fields.status+'</td>');
+                        $("#addTable").append('<td>操作</td>');
+                        $("#addTable").append("</tr>");
+
+                    }
+                },
+                error : function(err){
+                   console.log(err);
+                }
+            })
+    })
 </script>

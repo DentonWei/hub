@@ -4,7 +4,7 @@
 from django.conf.urls import url
 
 from hub_migrate import views
-from hub_migrate.interface import common, index, result
+from hub_migrate.interface import common, index, result, progress
 
 urlpatterns = [
     # 页面跳转
@@ -16,12 +16,16 @@ urlpatterns = [
     
     # index.html页面数据接口
     url(r'^index.html/get_job/$', index.get_job, name="get job"),
+    # url(r'^index.html/get_job/page(?P<num>[0-9]+)/$', index.get_job, name="get job"),
     url(r'^index.html/copy/$', index.copy, name="copy"),
     
     # new.html页面数据接口
     url(r'^test/$', common.test, name='test'),
     url(r'^submit/$', common.submit, name='submit'),
     url(r'^create/$', common.create, name='create'),
+    
+    # progress.html页面数据接口
+    url(r'^progress.html/get_job_status$', progress.get_job_status, name='get job status'),
     
     # result.html页面数据接口
     url(r'^result.html/get_job_info/$', result.get_job_info, name='get job info'),

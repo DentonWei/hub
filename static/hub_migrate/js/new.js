@@ -15,7 +15,7 @@ $(function(){
     //点击test按钮 相关业务操作
     $("#test").click(function(){
         $.ajax({
-            url :"http://192.168.1.112/hub_migrate/test/",
+            url :"http://192.168.1.112/hub_migrate/test",
             dataType : "json",
             async : true,
             type : "post",
@@ -35,7 +35,7 @@ $(function(){
     //点击submit按钮 相关业务操作
     $("#submit").click(function(){
         $.ajax({
-            url :"http://192.168.1.112/hub_migrate/submit/",
+            url :"http://192.168.1.112/hub_migrate/submit",
             dataType : "json",
             async : true,
             type : "post",
@@ -81,7 +81,7 @@ $(function(){
             }
             connection = JSON.stringify(connection);
             $.ajax({
-                url :"http://192.168.1.112/hub_migrate/create/",
+                url :"http://192.168.1.112/hub_migrate/create",
                 dataType : "json",
                 async : true,
                 type : "post",

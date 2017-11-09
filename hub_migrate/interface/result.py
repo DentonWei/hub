@@ -1,10 +1,12 @@
 import json
 import os
 
+from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from pyspark.sql import SparkSession, Row
-from django.core.paginator import Paginator
+from lxml import etree
+from pyspark.sql import SparkSession
+
 from hub_migrate.models import Job
 
 DATADETAIL = None
@@ -12,22 +14,32 @@ DATACOLUMNS = None
 PAGETEMP = None
 PAGE = None
 
+# 获取hive默认路径
+HIVE_HOME = os.getenv("HIVE_HOME")
+
+
 @csrf_exempt
-def get_job_info(request):
-
-    # initialize parameter
-    id = json.loads(request.body.decode("utf-8"))["id"]
-
-    # 获取请求Job对象
-    job = Job.objects.get(id=id)
+def init_result(request):
+    """
+    初始化result.html页面显示,
+    :return: hive数据库路径,以及该Job迁移的所有table
+    """
+    # 获取Job中的所有table
+    job = Job.objects.get(pk=int(request.body.decode("utf-8")))
     tables = job.sqoopsentence.table
-    # split tables on the base of ','
-    tableList = tables.split(',')
-    
-    # return table list of the job
-    a = {"success": 1, "tableList": tableList}
+    table_list = tables.split(',')
 
-    return JsonResponse(a)
+    database = job.sqoopsentence.hive_database
+    # 获取hive配置文件路径
+    hive_conf = os.path.join(HIVE_HOME, "conf/hive-site.xml")
+    # 生成hive配置文件的解析器,并解析文件
+    parser = etree.XMLParser()
+    xml = etree.parse(hive_conf, parser)
+    parse_str = "/configuration/property[name='hive.metastore.warehouse.dir']/value"
+    hive_database_dir = xml.xpath(parse_str)[0].text + "/" + database + ".db"
+    
+    return JsonResponse({"tables": table_list,
+                         "hive_path": hive_database_dir})
 
 
 @csrf_exempt

@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <title>HUB data migration</title>
-    <link rel="stylesheet" href="{{ static('hub_migrate/css/reset.css') }}">
-    <link rel="stylesheet" href="{{ static('hub_migrate/css/index.css') }}">
-    <script type="text/javascript" src="{{ static('hub_migrate/js/jquery.js') }}"></script>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script type="text/javascript" src="js/jquery.js"></script>
 </head>
 <body>
     <h1 class="title">Hub migration</h1>
@@ -16,7 +16,7 @@
         </div>
         <div class="right">
             <input type="text" placeholder="请输入查询条件">
-            <button>New</button>
+            <button id="new">New</button>
         </div>
         <div class="creatTable">
             <table cellpadding="0" cellspacing="0" border="1" >
@@ -36,13 +36,19 @@
                 </tbody>
             </table>
         </div>
+        <div class="functionList">
+            <button id="Progress">Progress</button>
+            <button id="Result">Result</button>
+            <button id="Copy">Copy</button>
+            <button id="Delete">Delete</button>
+        </div>
     </div>
 </body>
 </html>
 <script type="text/javascript">
     $(function(){
             $.ajax({
-                url : "http://192.168.1.112/hub_migrate/index.html/get_job/",
+                url : "http://192.168.1.112/hub_migrate/index.html/get_job",
                 dataType : "json",
                 async : true,
                 type : "post",
@@ -54,20 +60,34 @@
                     for(var i=0;i < json.length;i++){
                         addTable.append($("<tr>"));
                         var d = json[i];
-                        $("#addTable").append('<td><input type="radio" name="radio"></td>');
+                        var start = d.fields.start_time.split('T').join(' ');
+                        var finished = d.fields.finished_time.split('T').join(' ');
+                        $("#addTable").append('</tr><td><input type="radio" name="radio" value="radio"></td>');
                         $("#addTable").append('<td>'+d.pk+'</td>');
                         $("#addTable").append('<td>'+d.fields.name+'</td>');
-                        $("#addTable").append('<td>'+d.fields.start_time+'</td>');
-                        $("#addTable").append('<td>'+d.fields.finished_time+'</td>');
+                        $("#addTable").append('<td>'+start+'</td>');
+                        $("#addTable").append('<td>'+finished+'</td>');
                         $("#addTable").append('<td>'+d.fields.status+'</td>');
                         $("#addTable").append('<td>操作</td>');
                         $("#addTable").append("</tr>");
-
                     }
                 },
                 error : function(err){
                    console.log(err);
                 }
+            })
+            $("#Progress").click(function(){
+                var ckecked = $('input:radio[name="radio"]:checked');
+                if(ckecked){
+                    localStorage.setItem("id", ckecked.parent().next().html());
+                }
+                window.location.href = "progress.html";
+            })
+            $("#Result").click(function(){
+                window.location.href = "result.html";
+            })
+            $('#new').click(function(){
+                window.location.href = "new.html"
             })
     })
 </script>

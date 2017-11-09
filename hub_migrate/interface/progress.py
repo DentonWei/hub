@@ -11,8 +11,7 @@ def get_job_status(request):
     :param request: 请求获取Job的id,即pk
     :return: 返回一个数组, 数组记录当前Job中每个表的迁移状态
     """
-    req = request.body.decode("utf-8")
-    job = Job.objects.get(pk=int(req))
+    job = Job.objects.get(pk=int(request.body.decode("utf-8")))
 
     finished_tables = job.finished_table.split(",")
     migrating_table = [job.migrating_table]
@@ -31,4 +30,4 @@ def get_job_status(request):
         else:
             job_status.append((table, "waiting"))
     
-    return JsonResponse([job_status], safe=False)
+    return JsonResponse({"tables": job_status})

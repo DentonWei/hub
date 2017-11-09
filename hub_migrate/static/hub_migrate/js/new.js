@@ -15,7 +15,7 @@ $(function(){
     //点击test按钮 相关业务操作
     $("#test").click(function(){
         $.ajax({
-            url :"http://192.168.1.112/hub_migrate/test",
+            url :"/hub_migrate/test",
             dataType : "json",
             async : true,
             type : "post",
@@ -35,7 +35,7 @@ $(function(){
     //点击submit按钮 相关业务操作
     $("#submit").click(function(){
         $.ajax({
-            url :"http://192.168.1.112/hub_migrate/submit",
+            url :"/hub_migrate/submit",
             dataType : "json",
             async : true,
             type : "post",
@@ -54,7 +54,9 @@ $(function(){
             }
         })
     });
+
         //把json对象转化为字符串
+
         $("#create").click(function(){
             var connection = {
                 conn:{
@@ -79,7 +81,7 @@ $(function(){
             }
             connection = JSON.stringify(connection);
             $.ajax({
-                url :"http://192.168.1.112/hub_migrate/create",
+                url :"/hub_migrate/create",
                 dataType : "json",
                 async : true,
                 type : "post",
@@ -87,14 +89,14 @@ $(function(){
                 contentType : "application/json;charset=UTF-8",
                 success : function(data){
                     console.log(data);
+                    if(data.success == 1){
+                        window.location.href ="index.html";
+                    }
                 },
                 error : function(err){
                     console.log(err);
                 }
             })
-            setTimeout(function(){
-                window.location.href ="index.html";
-            },2000)
 
         })
 })

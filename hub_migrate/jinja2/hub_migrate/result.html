@@ -10,8 +10,8 @@
 <body>
     <div class="path">{{ hive_path }}</div>
     <div class="left">
-        {% for i in tableList %}
-        <p class="tables" >{{ i }}</p>
+        {% for table in tables %}
+        <p class="table" >{{ table }}</p>
         <br>
         {% endfor %}
     </div>
@@ -25,123 +25,123 @@
 </body>
 </html>
 <script type="application/javascript">
-     $('.tables').click(function () {
+     $('.table').click(function () {
         var tableInfo = {
-            id: {{ id }},
+            job_id: {{ job_id }},
             tableName: $(this).text()
-        }
+        };
         $.ajax({
-                url: "http://localhost:8000/hub_migrate/result.html/get_table_info/",
-                dataType: "json",
-                async: false,
-                type: "post",
-                data: JSON.stringify(tableInfo),
-                success: function (data) {
-                    console.log(data);
-                    var item;
-                    var listColumns = data["column"];
-                    var dataDetail = data["dataList"];
+            url: "http://localhost:8000/hub_migrate/result.html/get_table_info/",
+            dataType: "json",
+            async: false,
+            type: "post",
+            data: JSON.stringify(tableInfo),
+            success: function (data) {
+                console.log(data);
+                var item;
+                var listColumns = data["column"];
+                var dataDetail = data["dataList"];
 
-                    $(".tableInfo").empty();
+                $(".tableInfo").empty();
 
-                    <!--console.log(listColumns);-->
+                <!--console.log(listColumns);-->
 
+                $('.tableInfo').append("<tr>");
+                $.each(listColumns, function(i, result){
+                    item = "<td>" + result + "</td>";
+                    $('.tableInfo').append(item);
+                });
+                $('.tableInfo').append("</tr>");
+
+                $.each(dataDetail, function(i, result){
                     $('.tableInfo').append("<tr>");
-                    $.each(listColumns, function(i, result){
-                        item = "<td>" + result + "</td>";
+                    $.each(listColumns, function(j, flags){
+                        item = "<td>" + result[flags] + "</td>";
                         $('.tableInfo').append(item);
-                    });
-                    $('.tableInfo').append("</tr>");
-
-                    $.each(dataDetail, function(i, result){
-                        $('.tableInfo').append("<tr>");
-                        $.each(listColumns, function(j, flags){
-                            item = "<td>" + result[flags] + "</td>";
-                            $('.tableInfo').append(item);
-                        })
-                        $('.tableInfo').append("<tr>");
                     })
-                },
-                error: function (err) {
-                    console.log(err);
-                }
-            })
+                    $('.tableInfo').append("<tr>");
+                })
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
     })
 
 
     $('.nextPage').click(function () {
         $.ajax({
-                url: "http://localhost:8000/hub_migrate/result.html/get_nextPage_info/",
-                dataType: "json",
-                async: false,
-                type: "post",
-                success: function (data) {
-                    console.log(data);
-                    var item;
-                    var listColumns = data["column"];
-                    var dataDetail = data["dataList"];
+            url: "/hub_migrate/result.html/get_nextPage_info/",
+            dataType: "json",
+            async: false,
+            type: "post",
+            success: function (data) {
+                console.log(data);
+                var item;
+                var listColumns = data["column"];
+                var dataDetail = data["dataList"];
 
-                    $(".tableInfo").empty();
+                $(".tableInfo").empty();
 
-                    <!--console.log(listColumns);-->
+                <!--console.log(listColumns);-->
 
+                $('.tableInfo').append("<tr>");
+                $.each(listColumns, function(i, result){
+                    item = "<td>" + result + "</td>";
+                    $('.tableInfo').append(item);
+                });
+                $('.tableInfo').append("</tr>");
+
+                $.each(dataDetail, function(i, result){
                     $('.tableInfo').append("<tr>");
-                    $.each(listColumns, function(i, result){
-                        item = "<td>" + result + "</td>";
+                    $.each(listColumns, function(j, flags){
+                        item = "<td>" + result[flags] + "</td>";
                         $('.tableInfo').append(item);
-                    });
-                    $('.tableInfo').append("</tr>");
-
-                    $.each(dataDetail, function(i, result){
-                        $('.tableInfo').append("<tr>");
-                        $.each(listColumns, function(j, flags){
-                            item = "<td>" + result[flags] + "</td>";
-                            $('.tableInfo').append(item);
-                        })
-                        $('.tableInfo').append("<tr>");
                     })
-                },
-                error: function (err) {
-                    console.log(err);
-                }
+                    $('.tableInfo').append("<tr>");
+                })
+            },
+            error: function (err) {
+                console.log(err);
+            }
         })
     })
 
      $('.previousPage').click(function () {
         $.ajax({
-                url: "http://localhost:8000/hub_migrate/result.html/get_previousPage_info/",
-                dataType: "json",
-                async: false,
-                type: "post",
-                success: function (data) {
-                    console.log(data);
-                    var item;
-                    var listColumns = data["column"];
-                    var dataDetail = data["dataList"];
+            url: "http://localhost:8000/hub_migrate/result.html/get_previousPage_info/",
+            dataType: "json",
+            async: false,
+            type: "post",
+            success: function (data) {
+                console.log(data);
+                var item;
+                var listColumns = data["column"];
+                var dataDetail = data["dataList"];
 
-                    $(".tableInfo").empty();
+                $(".tableInfo").empty();
 
-                    <!--console.log(listColumns);-->
+                <!--console.log(listColumns);-->
 
+                $('.tableInfo').append("<tr>");
+                $.each(listColumns, function(i, result){
+                    item = "<td>" + result + "</td>";
+                    $('.tableInfo').append(item);
+                });
+                $('.tableInfo').append("</tr>");
+
+                $.each(dataDetail, function(i, result){
                     $('.tableInfo').append("<tr>");
-                    $.each(listColumns, function(i, result){
-                        item = "<td>" + result + "</td>";
+                    $.each(listColumns, function(j, flags){
+                        item = "<td>" + result[flags] + "</td>";
                         $('.tableInfo').append(item);
-                    });
-                    $('.tableInfo').append("</tr>");
-
-                    $.each(dataDetail, function(i, result){
-                        $('.tableInfo').append("<tr>");
-                        $.each(listColumns, function(j, flags){
-                            item = "<td>" + result[flags] + "</td>";
-                            $('.tableInfo').append(item);
-                        })
-                        $('.tableInfo').append("<tr>");
                     })
-                },
-                error: function (err) {
-                    console.log(err);
-                }
+                    $('.tableInfo').append("<tr>");
+                })
+            },
+            error: function (err) {
+                console.log(err);
+            }
         })
     })
 </script>

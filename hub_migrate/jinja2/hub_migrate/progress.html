@@ -1,63 +1,36 @@
 <!DOCTYPE html>
-<html>
-<head lang="zh-CN">
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <title>Hub migration</title>
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/progress.css">
-    <script type="text/javascript" src="js/jquery.js"></script>
+    <link rel="stylesheet" href="{{ static('hub_migrate/css/reset.css') }}">
+    <link rel="stylesheet" href="{{ static('hub_migrate/css/progress.css') }}">
+    <script type="text/javascript" src="{{ static('hub_migrate/js/jquery.js') }}"></script>
 </head>
 <body>
     <h1 class="title">Hub migration</h1>
-    <div class="container"></div>
-    <script type="text/javascript">
-        $(function(){
-            var id = localStorage.getItem("id")
-            console.log(id);
-            $.ajax({
-                url :"http://192.168.1.112/hub_migrate/progress.html/get_job_status",
-                dataType : "json",
-                async : true,
-                type : "post",
-                data : id,
-                contentType : "application/json;charset=UTF-8",
-                success : function(data){
-                    console.log(data);
-                    for(var i =0;i < data.tables.length;i++) {
-                            var $div = '<div class="top" >';
-                        for(var j=0; j< 2; j++){
-                            var $span = "<span>" + data.tables[i][j] + "</span>";
-                            $div += $span;
-                            if (j == 0){
-                                $div += "......";
-                            }
-                        }
-                        $div += ('</div>');
-                            $('.container').append($div);
-                        }
-                    var spans = $('.container .top :last-child');
-//                    console.log(spans);
-                    for (var i=0; i<spans.length; i++){
-                        var span = $('.container .top:eq('+i+') span:eq(1)');
-                        console.log(span);
-                        if(span.text() == "finished"){
-                            span.css("color","green");
-                        }else if(span.text() == "migrating"){
-                            span.css("color","yellow");
-                        }else{
-                            span.css("color","red");
-                        }
-                    }
-                },
-                error : function(err){
-                    console.log(err);
-                }
-            })
-            setInterval(function(){
-                window.location.reload()
-            },10000)
-        })
-    </script>
+    <div class="container">
+        {% for table, status in job_status %}
+        <div class="top">
+            <span>{{ table }}</span>----------<span>{{ status }}</span>
+        </div>
+        {% endfor %}
+    </div>
 </body>
 </html>
+<script>
+$(function(){
+    var spans = $('.container .top :last-child');
+    for (var i=0; i<spans.length; i++){
+        var span = $('.container .top:eq('+i+') span:eq(1)');
+        console.log(span);
+        if(span.text() == "finished"){
+            span.css("color","green");
+        }else if(span.text() == "migrating"){
+            span.css("color","yellow");
+        }else{
+            span.css("color","red");
+        }
+    }
+})
+</script>

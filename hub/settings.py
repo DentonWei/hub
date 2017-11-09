@@ -27,6 +27,17 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '192.168.1.112', "192.168.0.106"]
 
+# 缓存设置
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',       # 缓存后端类型,这里使用文件系统缓存
+        'LOCATION': '/var/tmp/django_cache',        # 缓存存储目录
+        'TIMEOUT': 60,      # 缓存的默认过期时间
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000     # 高速缓存允许的最大条目数
+        }
+    }
+}
 
 # Application definition
 

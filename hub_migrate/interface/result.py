@@ -1,6 +1,7 @@
 import json
 import os
 
+from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -19,47 +20,21 @@ HIVE_HOME = os.getenv("HIVE_HOME")
 
 
 @csrf_exempt
-def init_result(request):
-    """
-    初始化result.html页面显示,
-    :return: hive数据库路径,以及该Job迁移的所有table
-    """
-    # 获取Job中的所有table
-    job = Job.objects.get(pk=int(request.body.decode("utf-8")))
-    tables = job.sqoopsentence.table
-    table_list = tables.split(',')
-
-    database = job.sqoopsentence.hive_database
-    # 获取hive配置文件路径
-    hive_conf = os.path.join(HIVE_HOME, "conf/hive-site.xml")
-    # 生成hive配置文件的解析器,并解析文件
-    parser = etree.XMLParser()
-    xml = etree.parse(hive_conf, parser)
-    parse_str = "/configuration/property[name='hive.metastore.warehouse.dir']/value"
-    hive_database_dir = xml.xpath(parse_str)[0].text + "/" + database + ".db"
-    
-    return JsonResponse({"tables": table_list,
-                         "hive_path": hive_database_dir})
-
-
-@csrf_exempt
 def get_table_info(request):
     # initialize parameter
     global DATADETAIL, PAGETEMP, PAGE, DATACOLUMNS
 
     # print(request.POST)
-    jsonTemp = json.loads(request.body.decode("utf-8"))
-    id = jsonTemp["id"]
-    tableName = jsonTemp["tableName"]
-    dataColumnNameList = []
-    dataDetailDicList = []
+    json_temp = json.loads(request.body.decode("utf-8"))
+    job_id = json_temp["job_id"]
+    table_name = json_temp["tableName"]
 
     # 获取请求Job对象
-    job = Job.objects.get(pk=id)
+    job = Job.objects.get(pk=job_id)
 
-    if tableName:
+    if table_name:
         # get hive database name
-        dataBaseName = job.sqoopsentence.hive_database
+        database_name = job.sqoopsentence.hive_database
 
         # set spark configuration
         spark = SparkSession.builder \
@@ -70,24 +45,27 @@ def get_table_info(request):
             .getOrCreate()
 
         # set hive database
-        spark.sql("use " + "default")
+        spark.sql("use " + database_name)
 
         # get the table data
-        dataFrame = spark.table(tableName)
-        DATACOLUMNS = dataFrame.columns
-        dataColumnNameList = DATACOLUMNS
-        dataDetail = dataFrame.select('*').collect()
+        data_frame = spark.table(table_name)
+        # cache.set("dataframe", data_frame)
+        
+        DATACOLUMNS = data_frame.columns
+        data_column_name_list = DATACOLUMNS
+        data_detail = data_frame.select('*').collect()
 
         # initialize global parameter
-        DATADETAIL = [dataTemp.asDict() for dataTemp in dataDetail]
-        PAGETEMP = Paginator(DATADETAIL, 20)
+        DATADETAIL = [dataTemp.asDict() for dataTemp in data_detail]
+        p = Paginator(DATADETAIL, 20)
+        cache.set("result_page", p)
 
         # return data
         PAGE = 1
-        dataDetailDicList = PAGETEMP.page(PAGE).object_list
+        data_detail_dic_list = p.page(PAGE).object_list
 
     # return column name, first 20 rows data and table list of the job
-    a = {"success": 1, "column": dataColumnNameList, "dataList": dataDetailDicList}
+    a = {"success": 1, "column": data_column_name_list, "dataList": data_detail_dic_list}
 
     return JsonResponse(a)
 

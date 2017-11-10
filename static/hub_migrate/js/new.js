@@ -15,7 +15,7 @@ $(function(){
     //点击test按钮 相关业务操作
     $("#test").click(function(){
         $.ajax({
-            url :"http://192.168.1.112/hub_migrate/test",
+            url :"/hub_migrate/test",
             dataType : "json",
             async : true,
             type : "post",
@@ -35,7 +35,7 @@ $(function(){
     //点击submit按钮 相关业务操作
     $("#submit").click(function(){
         $.ajax({
-            url :"http://192.168.1.112/hub_migrate/submit",
+            url :"/hub_migrate/submit",
             dataType : "json",
             async : true,
             type : "post",
@@ -81,20 +81,22 @@ $(function(){
             }
             connection = JSON.stringify(connection);
             $.ajax({
-                url :"http://192.168.1.112/hub_migrate/create",
+                url :"/hub_migrate/create",
                 dataType : "json",
                 async : true,
                 type : "post",
                 data : connection,
-                // contentType : "application/json;charset=UTF-8",
+                contentType : "application/json;charset=UTF-8",
                 success : function(data){
                     console.log(data);
-
+                    if(data.success == 1){
+                        window.location.href ="index.html";
+                    }
                 },
                 error : function(err){
                     console.log(err);
                 }
             })
-            window.location.href ="http://192.168.1.112/hub_migrate/index.html";
+
         })
 })
